@@ -238,7 +238,7 @@ base_lr = 3e-4
 optim = keras.optimizers.Adam(lr=base_lr)
 model.compile(optimizer=optim,
               loss=MultiboxLoss(NUM_CLASSES, neg_pos_ratio=2.0).compute_loss)
-nb_epoch = 100
+nb_epoch = 30
 history = model.fit_generator(gen.generate(True), gen.train_batches,
                               nb_epoch, verbose=1,
                               callbacks=callbacks,

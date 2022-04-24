@@ -84,8 +84,8 @@ class VideoTest(object):
             "trying to open a webcam, make sure you video_path is an integer!"))
         
         # Compute aspect ratio of video     
-        vidw = vid.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)
-        vidh = vid.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT)
+        vidw = vid.get(cv2.CAP_PROP_FRAME_WIDTH)
+        vidh = vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
         vidar = vidw/vidh
         
         # Skip frames until reaching start_frame
@@ -96,7 +96,7 @@ class VideoTest(object):
         curr_fps = 0
         fps = "FPS: ??"
         prev_time = timer()
-            
+        num_frame = 0
         while True:
             retval, orig_image = vid.read()
             if not retval:
@@ -159,7 +159,7 @@ class VideoTest(object):
                     text_pos = (xmin + 5, ymin)
                     cv2.rectangle(to_draw, text_top, text_bot, self.class_colors[class_num], -1)
                     cv2.putText(to_draw, text, text_pos, cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0,0,0), 1)
-            
+            # print(text)
             # Calculate FPS
             # This computes FPS for everything, not just the model's execution 
             # which may or may not be what you want
@@ -174,10 +174,12 @@ class VideoTest(object):
                 curr_fps = 0
             
             # Draw FPS in top left corner
-            cv2.rectangle(to_draw, (0,0), (50, 17), (255,255,255), -1)
-            cv2.putText(to_draw, fps, (3,10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0,0,0), 1)
+            # cv2.rectangle(to_draw, (0,0), (50, 17), (255,255,255), -1)
+            # cv2.putText(to_draw, fps, (3,10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0,0,0), 1)
             
             cv2.imshow("SSD result", to_draw)
             cv2.waitKey(10)
-            
-        
+            # print(text)
+            if num_frame % 6 == 0:
+               cv2.imwrite("output/frame_" + str('{0:04d}'.format(num_frame//6)) +".png", to_draw)
+            num_frame += 1
